@@ -1,0 +1,7 @@
+#!/bin/sh
+export QT_QPA_GENERIC_PLUGINS='Auto'
+export QT_QPA_PLATFORM='eglfs'
+export QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="rotate=180"
+
+cd /usr/share/qt5everywheredemo-1.0
+./QtDemo
