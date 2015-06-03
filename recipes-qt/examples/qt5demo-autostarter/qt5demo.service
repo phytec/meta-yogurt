@@ -4,8 +4,10 @@ Requires=pvr-init.service
 After=pvr-init.service
 
 [Service]
-Type=oneshot
+Type=simple
 ExecStart=/usr/bin/qt5demo-starter
+ExecStartPre=-/bin/sh -c "echo 0 > /sys/class/graphics/fbcon/cursor_blink"
+ExecStopPost=-/bin/sh -c "systemctl restart getty@tty1"
 
 [Install]
 WantedBy=multi-user.target
