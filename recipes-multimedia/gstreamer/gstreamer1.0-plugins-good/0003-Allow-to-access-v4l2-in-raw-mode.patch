@@ -1,8 +1,9 @@
-From 51a6bf01827a8fe7d15d4b1fb85424cf9c1083e6 Mon Sep 17 00:00:00 2001
+From b62ccf674b03c2cf5320a549e7f015ab0b79331a Mon Sep 17 00:00:00 2001
 From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 Date: Mon, 15 Dec 2014 19:32:29 +0100
-Subject: [PATCH 3/3] Allow to access v4l2 in raw mode
+Subject: [PATCH] Allow to access v4l2 in raw mode
 
+Signed-off-by: Stefan Lengfeld <s.lengfeld@phytec.de>
 ---
  sys/v4l2/gstv4l2object.c |  3 +++
  sys/v4l2/gstv4l2object.h |  3 +++

@@ -1,0 +1,101 @@
+From 8d6295301efa3857fcd34ddcfbce829f97ec6515 Mon Sep 17 00:00:00 2001
+From: ayaka <ayaka@soulik.info>
+Date: Sun, 7 Sep 2014 04:40:36 +0800
+Subject: [PATCH] v4l2: modify GstV4l2VideoDecCData to GstV4l2VideoCData
+
+The v4l2videodec and v4l2videoenc could use the same
+metadata to hold information.
+I also modify the buffer size in this commit.
+For the encoder of s5p-mfc the size is 2MB, but it is correct
+for decoder which is 1MB.
+
+Signed-off-by: ayaka <ayaka@soulik.info>
+Signed-off-by: Stefan Lengfeld <s.lengfeld@phytec.de>
+---
+ sys/v4l2/gstv4l2object.c   | 21 ++++++++++++++++-----
+ sys/v4l2/gstv4l2videodec.c |  8 ++++----
+ 2 files changed, 20 insertions(+), 9 deletions(-)
+
+diff --git a/sys/v4l2/gstv4l2object.c b/sys/v4l2/gstv4l2object.c
+index 874f386..dac4063 100644
+--- a/sys/v4l2/gstv4l2object.c
++++ b/sys/v4l2/gstv4l2object.c
+@@ -56,7 +56,8 @@ GST_DEBUG_CATEGORY_EXTERN (v4l2_debug);
+ #define DEFAULT_PROP_FREQUENCY          0
+ #define DEFAULT_PROP_IO_MODE            GST_V4L2_IO_AUTO
+ 
+-#define ENCODED_BUFFER_SIZE             (1 * 1024 * 1024)
++#define ENCODEDR_BUFFER_SIZE             (2 * 1024 * 1024)
++#define DECODEDR_BUFFER_SIZE             (1 * 1024 * 1024)
+ 
+ #ifndef V4L2_PIX_FMT_SBGGR12
+ #  define V4L2_PIX_FMT_SBGGR12 v4l2_fourcc('B', 'G', '1', '2')  /* 12  BGBG.. GRGR.. */
+@@ -3356,8 +3357,13 @@ gst_v4l2_object_set_format_full (GstV4l2Object * v4l2object, GstCaps * caps,
+       format.fmt.pix_mp.plane_fmt[i].bytesperline = stride;
+     }
+ 
+-    if (GST_VIDEO_INFO_FORMAT (&info) == GST_VIDEO_FORMAT_ENCODED)
+-      format.fmt.pix_mp.plane_fmt[0].sizeimage = ENCODED_BUFFER_SIZE;
++    if (GST_VIDEO_INFO_FORMAT (&info) == GST_VIDEO_FORMAT_ENCODED) {
++      if (GST_IS_VIDEO_ENCODER (v4l2object)) {
++        format.fmt.pix_mp.plane_fmt[0].sizeimage = ENCODEDR_BUFFER_SIZE;
++      } else {
++        format.fmt.pix_mp.plane_fmt[0].sizeimage = DECODEDR_BUFFER_SIZE;
++      }
++    }
+   } else {
+     gint stride = GST_VIDEO_INFO_PLANE_STRIDE (&info, 0);
+ 
+@@ -3374,8 +3380,13 @@ gst_v4l2_object_set_format_full (GstV4l2Object * v4l2object, GstCaps * caps,
+     /* try to ask our prefered stride */
+     format.fmt.pix.bytesperline = stride;
+ 
+-    if (GST_VIDEO_INFO_FORMAT (&info) == GST_VIDEO_FORMAT_ENCODED)
+-      format.fmt.pix.sizeimage = ENCODED_BUFFER_SIZE;
++    if (GST_VIDEO_INFO_FORMAT (&info) == GST_VIDEO_FORMAT_ENCODED) {
++      if (GST_IS_VIDEO_ENCODER (v4l2object)) {
++        format.fmt.pix.sizeimage = ENCODEDR_BUFFER_SIZE;
++      } else {
++        format.fmt.pix.sizeimage = DECODEDR_BUFFER_SIZE;
++      }
++    }
+   }
+ 
+   GST_DEBUG_OBJECT (v4l2object->element, "Desired format is %dx%d, format "
+diff --git a/sys/v4l2/gstv4l2videodec.c b/sys/v4l2/gstv4l2videodec.c
+index f06e4f6..8da5b88 100644
+--- a/sys/v4l2/gstv4l2videodec.c
++++ b/sys/v4l2/gstv4l2videodec.c
+@@ -45,7 +45,7 @@ typedef struct
+   gchar *device;
+   GstCaps *sink_caps;
+   GstCaps *src_caps;
+-} GstV4l2VideoDecCData;
++} GstV4l2VideoCData;
+ 
+ enum
+ {
+@@ -844,7 +844,7 @@ gst_v4l2_video_dec_subclass_init (gpointer g_class, gpointer data)
+ {
+   GstV4l2VideoDecClass *klass = GST_V4L2_VIDEO_DEC_CLASS (g_class);
+   GstElementClass *element_class = GST_ELEMENT_CLASS (g_class);
+-  GstV4l2VideoDecCData *cdata = data;
++  GstV4l2VideoCData *cdata = data;
+ 
+   klass->default_device = cdata->device;
+ 
+@@ -880,9 +880,9 @@ gst_v4l2_video_dec_register (GstPlugin * plugin, const gchar * basename,
+   GTypeInfo type_info = { 0, };
+   GType type, subtype;
+   gchar *type_name;
+-  GstV4l2VideoDecCData *cdata;
++  GstV4l2VideoCData *cdata;
+ 
+-  cdata = g_new0 (GstV4l2VideoDecCData, 1);
++  cdata = g_new0 (GstV4l2VideoCData, 1);
+   cdata->device = g_strdup (device_path);
+   cdata->sink_caps = gst_caps_ref (sink_caps);
+   cdata->src_caps = gst_caps_ref (src_caps);
+-- 
+1.9.1
+

@@ -1,0 +1,52 @@
+From 8c157ea89178aafa6a1ce1a24c10fc10333c931b Mon Sep 17 00:00:00 2001
+From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Date: Thu, 10 Sep 2015 11:44:01 +0200
+Subject: [PATCH] v4l2videoenc: set width + height of output caps
+
+required by coda driver
+
+Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Signed-off-by: Stefan Lengfeld <s.lengfeld@phytec.de>
+---
+ sys/v4l2/gstv4l2videoenc.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/sys/v4l2/gstv4l2videoenc.c b/sys/v4l2/gstv4l2videoenc.c
+index 907753b..a329af6 100644
+--- a/sys/v4l2/gstv4l2videoenc.c
++++ b/sys/v4l2/gstv4l2videoenc.c
+@@ -462,6 +462,17 @@ gst_v4l2_video_enc_handle_frame (GstVideoEncoder * encoder,
+ 
+   if (NULL != outcaps) {
+     GstBufferPool *pool = GST_BUFFER_POOL (self->v4l2output->pool);
++    GstVideoInfo info;
++    GstStructure *structure;
++
++    if (!gst_v4l2_object_acquire_format (self->v4l2output, &info))
++      goto acquire_format_failed;
++
++    structure = gst_caps_get_structure (outcaps, 0);
++    gst_structure_set (structure,
++        "width", G_TYPE_INT, (gint) info.width,
++        "height", G_TYPE_INT, (gint) info.height, NULL);
++
+     gst_v4l2_object_set_format (self->v4l2capture, outcaps);
+ 
+     if (!gst_buffer_pool_is_active (pool)) {
+@@ -540,6 +551,13 @@ not_negotiated:
+     ret = GST_FLOW_NOT_NEGOTIATED;
+     goto drop;
+   }
++
++acquire_format_failed:
++  {
++    GST_ERROR_OBJECT (self, "Failed to acquire format of output interface.");
++    return GST_FLOW_ERROR;
++  }
++
+ activate_failed:
+   {
+     GST_ELEMENT_ERROR (self, RESOURCE, SETTINGS,
+-- 
+1.9.1
+

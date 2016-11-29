@@ -1,0 +1,27 @@
+From ad57953f51ca1051f3f1d44dbbba508980c351fe Mon Sep 17 00:00:00 2001
+From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Date: Thu, 10 Sep 2015 11:45:15 +0200
+Subject: [PATCH] v4l2videoenc: build with -std=gnu99
+
+Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Signed-off-by: Stefan Lengfeld <s.lengfeld@phytec.de>
+---
+ sys/v4l2/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sys/v4l2/Makefile.am b/sys/v4l2/Makefile.am
+index 6981e2d..c950685 100644
+--- a/sys/v4l2/Makefile.am
++++ b/sys/v4l2/Makefile.am
+@@ -28,7 +28,7 @@ libgstvideo4linux2_la_CFLAGS =   $(GST_PLUGINS_BASE_CFLAGS) \
+ 				 $(GST_CFLAGS) \
+ 				 $(X_CFLAGS) \
+ 				 $(LIBV4L2_CFLAGS) \
+-				 $(GUDEV_CFLAGS)
++				 $(GUDEV_CFLAGS) -std=gnu99
+ 
+ libgstvideo4linux2_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
+ libgstvideo4linux2_la_LIBTOOLFLAGS = $(GST_PLUGIN_LIBTOOLFLAGS)
+-- 
+1.9.1
+

@@ -1,0 +1,26 @@
+From 2ec75898586dad375d3a59e7c5b918988cc05600 Mon Sep 17 00:00:00 2001
+From: Stefan Christ <s.christ@phytec.de>
+Date: Fri, 15 Apr 2016 12:57:22 +0200
+Subject: [PATCH] v4l2videoenc: Don't unlock the stream lock twice
+
+Signed-off-by: Stefan Lengfeld <s.lengfeld@phytec.de>
+---
+ sys/v4l2/gstv4l2videoenc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sys/v4l2/gstv4l2videoenc.c b/sys/v4l2/gstv4l2videoenc.c
+index a329af6..bc9ec59 100644
+--- a/sys/v4l2/gstv4l2videoenc.c
++++ b/sys/v4l2/gstv4l2videoenc.c
+@@ -285,7 +285,7 @@ gst_v4l2_video_enc_flush (GstVideoEncoder * encoder)
+     gst_v4l2_object_unlock_stop (self->v4l2capture);
+     gst_pad_stop_task (encoder->srcpad);
+ 
+-    GST_VIDEO_ENCODER_STREAM_UNLOCK (encoder);
++    GST_VIDEO_ENCODER_STREAM_LOCK (encoder);
+ 
+   }
+ 
+-- 
+1.9.1
+
