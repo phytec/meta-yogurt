@@ -1,0 +1,98 @@
+From 3ff5b7efbd01f349929c2b081241a7cb57d297e6 Mon Sep 17 00:00:00 2001
+From: ayaka <ayaka@soulik.info>
+Date: Wed, 10 Sep 2014 05:20:25 +0800
+Subject: [PATCH 4/9] v4l2: move GstVideoCData to v4l2-utils.h
+
+But it broke the code style.
+
+Signed-off-by: ayaka <ayaka@soulik.info>
+Signed-off-by: Stefan Lengfeld <s.lengfeld@phytec.de>
+(cherry picked from commit d89afc750495b0d5a22b5c0d8664a4500a0f6a60)
+Signed-off-by: Christian Hemp <c.hemp@phytec.de>
+
+Conflicts:
+	sys/v4l2/v4l2-utils.h
+---
+ sys/v4l2/gstv4l2videodec.c |  7 -------
+ sys/v4l2/v4l2-utils.h      | 32 +++++++++++++++++++++-----------
+ 2 files changed, 21 insertions(+), 18 deletions(-)
+
+diff --git a/sys/v4l2/gstv4l2videodec.c b/sys/v4l2/gstv4l2videodec.c
+index f4508c7..9de947e 100644
+--- a/sys/v4l2/gstv4l2videodec.c
++++ b/sys/v4l2/gstv4l2videodec.c
+@@ -40,13 +40,6 @@ GST_DEBUG_CATEGORY_STATIC (gst_v4l2_video_dec_debug);
+ 
+ static gboolean gst_v4l2_video_dec_flush (GstVideoDecoder * decoder);
+ 
+-typedef struct
+-{
+-  gchar *device;
+-  GstCaps *sink_caps;
+-  GstCaps *src_caps;
+-} GstV4l2VideoCData;
+-
+ enum
+ {
+   PROP_0,
+diff --git a/sys/v4l2/v4l2-utils.h b/sys/v4l2/v4l2-utils.h
+index 1bc0062..eb2adc8 100644
+--- a/sys/v4l2/v4l2-utils.h
++++ b/sys/v4l2/v4l2-utils.h
+@@ -43,12 +43,13 @@ G_BEGIN_DECLS
+ 
+ typedef struct _GstV4l2Iterator GstV4l2Iterator;
+ typedef struct _GstV4l2Error GstV4l2Error;
++typedef struct _GstV4l2VideoCData GstV4l2VideoCData;
+ 
+ struct _GstV4l2Iterator
+ {
+-    const gchar *device_path;
+-    const gchar *device_name;
+-    const gchar *sys_path;
++  const gchar *device_path;
++  const gchar *device_name;
++  const gchar *sys_path;
+ };
+ 
+ struct _GstV4l2Error
+@@ -60,19 +61,28 @@ struct _GstV4l2Error
+     gint line;
+ };
+ 
+-GstV4l2Iterator *  gst_v4l2_iterator_new (void);
+-gboolean           gst_v4l2_iterator_next (GstV4l2Iterator *it);
+-void               gst_v4l2_iterator_free (GstV4l2Iterator *it);
++struct _GstV4l2VideoCData
++{
++  gchar *device;
++  GstCaps *sink_caps;
++  GstCaps *src_caps;
++};
+ 
+-const gchar *      gst_v4l2_iterator_get_device_path (GstV4l2Iterator *it);
+-const gchar *      gst_v4l2_iterator_get_device_name (GstV4l2Iterator *it);
+-const gchar *      gst_v4l2_iterator_get_sys_path (GstV4l2Iterator *it);
+ 
+ void               gst_v4l2_clear_error (GstV4l2Error *error);
+ void               gst_v4l2_error (gpointer element, GstV4l2Error *error);
+ 
+-G_END_DECLS
++GstV4l2Iterator *gst_v4l2_iterator_new (void);
++gboolean gst_v4l2_iterator_next (GstV4l2Iterator * it);
++void gst_v4l2_iterator_free (GstV4l2Iterator * it);
+ 
+-#endif /* __V4L2_UTILS_H__ */
++const gchar *gst_v4l2_iterator_get_device_path (GstV4l2Iterator * it);
++const gchar *gst_v4l2_iterator_get_device_name (GstV4l2Iterator * it);
++const gchar *gst_v4l2_iterator_get_sys_path (GstV4l2Iterator * it);
+ 
++gboolean
++gst_v4l2_element_register (GstPlugin * plugin, const gchar * basename,
++    const gchar * device_path, GstCaps * sink_caps, GstCaps * src_caps);
+ 
++G_END_DECLS
++#endif /* __V4L2_UTILS_H__ */
+-- 
+1.9.1
+

@@ -1,0 +1,41 @@
+From 94ce7432f2d7c515d10c5ace74f38e12b3a09ea1 Mon Sep 17 00:00:00 2001
+From: Stefan Lengfeld <s.lengfeld@phytec.de>
+Date: Mon, 28 Nov 2016 14:16:02 +0100
+Subject: [PATCH 9/9] =?UTF-8?q?v4l2videoenc:=20fix=20warning:=20unused=20v?=
+ =?UTF-8?q?ariable=20=E2=80=98structure=E2=80=99?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Only a cosmetic fix.
+
+Signed-off-by: Stefan Lengfeld <s.lengfeld@phytec.de>
+(cherry picked from commit f37e0f317f1b88db566051a567777369eab31e29)
+Signed-off-by: Christian Hemp <c.hemp@phytec.de>
+---
+ sys/v4l2/gstv4l2videoenc.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/sys/v4l2/gstv4l2videoenc.c b/sys/v4l2/gstv4l2videoenc.c
+index 5dad836..8116a78 100644
+--- a/sys/v4l2/gstv4l2videoenc.c
++++ b/sys/v4l2/gstv4l2videoenc.c
+@@ -244,7 +244,6 @@ gst_v4l2_video_enc_set_format (GstVideoEncoder * encoder,
+   GstV4l2Error error = GST_V4L2_ERROR_INIT;
+   gboolean ret = TRUE;
+   GstV4l2VideoEnc *self = GST_V4L2_VIDEO_ENC (encoder);
+-  GstStructure *structure;
+ 
+   GST_DEBUG_OBJECT (self, "Setting format: %" GST_PTR_FORMAT, state->caps);
+ 
+@@ -450,7 +449,6 @@ gst_v4l2_video_enc_handle_frame (GstVideoEncoder * encoder,
+   GstV4l2Error error = GST_V4L2_ERROR_INIT;
+   GstV4l2VideoEnc *self = GST_V4L2_VIDEO_ENC (encoder);
+   GstFlowReturn ret = GST_FLOW_OK;
+-  GstStructure *structure;
+ 
+   GST_DEBUG_OBJECT (self, "Handling frame %d", frame->system_frame_number);
+ 
+-- 
+1.9.1
+
