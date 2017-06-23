@@ -28,11 +28,18 @@ RDEPENDS_${PN} = " \
     gstreamer1.0-plugins-bad-fbdevsink \
     gstreamer1.0-plugins-bad-videoparsersbad \
     gst-plugin-i2c \
+    ${@bb.utils.contains("DISTRO_FEATURES", "vendor", "${PACKAGES_VENDOR}", "${PACKAGES_MAINLINE}", d)} \
 "
 
-# Camera tools by PHYTEC
-RDEPENDS_${PN}_append_mx6 = " \
-    phytec-gstreamer-examples \
+PACKAGES_MAINLINE = ""
+PACKAGES_MAINLINE_append_mx6 = " \
     bvtest \
+    phytec-gstreamer-examples \
     phytec-v4l2-c-examples \
+"
+
+PACKAGES_VENDOR = ""
+PACKAGES_VENDOR_append_mx6ul = " \
+    phytec-gstreamer-examples-imx6ul \
+    phytec-v4l2-c-examples-imx6ul\
 "
