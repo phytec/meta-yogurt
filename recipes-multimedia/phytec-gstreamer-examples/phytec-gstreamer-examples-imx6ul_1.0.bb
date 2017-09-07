@@ -22,7 +22,7 @@ PR = "r0"
 #        phytec-gstreamer-examples-imx6ul-1.0/
 SRC_URI = "file://${PN}-${PV}.tar.gz"
 
-GSTREAMER_EXAMPLES_DIR = "${datadir}/${PN}"
+GSTREAMER_EXAMPLES_DIR = "${datadir}/phytec-gstreamer-examples"
 
 do_compile() {
 	${CC} ${CFLAGS} ${LDFLAGS} -o tools/i2c tools/i2c.c
@@ -52,7 +52,10 @@ do_install() {
 	ln -s ${GSTREAMER_EXAMPLES_DIR} ${D}/home/root/gstreamer_examples
 }
 
-FILES_${PN} += "/home/root/"
+FILES_${PN} += " \
+    /home/root/ \
+    ${GSTREAMER_EXAMPLES_DIR} \
+"
 FILES_${PN}-dbg = " \
     ${prefix}/src \
     ${GSTREAMER_EXAMPLES_DIR}/tools/.debug \

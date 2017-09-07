@@ -22,7 +22,7 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install() {
-    INSTALL_DIR="${datadir}/${PN}"
+    INSTALL_DIR="${datadir}/phytec-v4l2-c-examples"
 
     install -d ${D}${INSTALL_DIR}
     for text in `find -name '*.txt'`; do
@@ -38,7 +38,10 @@ do_install() {
     ln -s ${INSTALL_DIR} ${D}/home/root/v4l2_c-examples
 }
 
-FILES_${PN} += "/home/root/"
+FILES_${PN} += " \
+    /home/root/ \
+    ${datadir}/phytec-v4l2-c-examples \
+"
 RDEPENDS_${PN} += " \
     media-ctl \
     bvtest \
