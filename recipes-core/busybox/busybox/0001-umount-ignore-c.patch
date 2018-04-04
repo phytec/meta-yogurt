@@ -1,0 +1,44 @@
+From b8e782dd6acbb9987857ae50dcaa61ce9a194579 Mon Sep 17 00:00:00 2001
+From: Shawn Landden <slandden@gmail.com>
+Date: Mon, 8 Jan 2018 13:31:58 +0100
+Subject: [PATCH] umount: ignore -c
+
+"-c, --no-canonicalize: Do not canonicalize paths."
+
+As busybox doesn't canonicalize paths in the first place it is safe to ignore
+this option.
+
+See https://github.com/systemd/systemd/issues/7786
+
+Signed-off-by: Shawn Landden <slandden@gmail.com>
+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+---
+ util-linux/umount.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/util-linux/umount.c b/util-linux/umount.c
+index c6c7441b8670..c9f1c0db0439 100644
+--- a/util-linux/umount.c
++++ b/util-linux/umount.c
+@@ -44,7 +44,7 @@ static struct mntent *getmntent_r(FILE* stream, struct mntent* result,
+ }
+ #endif
+ 
+-/* Ignored: -v -t -i
++/* ignored: -c -v -t -i
+  * bbox always acts as if -d is present.
+  * -D can be used to suppress it (bbox extension).
+  * Rationale:
+@@ -52,7 +52,7 @@ static struct mntent *getmntent_r(FILE* stream, struct mntent* result,
+  * thus, on many systems, bare umount _does_ drop loop devices.
+  * (2) many users request this feature.
+  */
+-#define OPTION_STRING           "fldDnra" "vt:i"
++#define OPTION_STRING           "fldnra" "cvt:i"
+ #define OPT_FORCE               (1 << 0) // Same as MNT_FORCE
+ #define OPT_LAZY                (1 << 1) // Same as MNT_DETACH
+ //#define OPT_FREE_LOOP           (1 << 2) // -d is assumed always present
+-- 
+2.7.4
+
