@@ -1,0 +1,61 @@
+From 899733fe53b30d2bfd7a7aed44ca6df0955fbd52 Mon Sep 17 00:00:00 2001
+From: Norbert Wesp <n.wesp@phytec.de>
+Date: Wed, 1 Aug 2018 13:59:45 +0200
+Subject: [PATCH] Add GBM_CFLAGS and define EGL_PLATFORM_GBM_MESA
+
+Building an image with yocto for an 'am335x' processor will fail,
+because 'gbm.h' can not be found and 'EGL_PLATFORM_GBM_MESA' is not defined.
+
+So simply adding define of 'EGL_PLATFORM_GBM_MESA' in 'gstgldisplay_egl.c'
+and adding 'GBM_CFLAGS' in 'gst-gl.m4' to get rid of this errors and complete
+a full build process.
+
+ERRORs were:
+-----------
+gst-plugins-base-1.14.1/gst-libs/gst/gl/gbm/gstglwindow_gbm_egl.h:24:10:
+fatal error: gbm.h: No such file or directory
+  #include <gbm.h>
+           ^~~~~~~
+
+gst-plugins-base-1.14.1/gst-libs/gst/gl/egl/gstgldisplay_egl.c:157:39:
+error: 'EGL_PLATFORM_GBM_MESA' undeclared (first use in this function);
+did you mean 'EGL_PLATFORM_WAYLAND'?
+  ret = _gst_eglGetPlatformDisplay (EGL_PLATFORM_GBM_MESA, (gpointer) display,
+                                    ^~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Norbert Wesp <n.wesp@phytec.de>
+---
+ gst-libs/gst/gl/egl/gstgldisplay_egl.c | 3 +++
+ m4/gst-gl.m4                           | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/gst-libs/gst/gl/egl/gstgldisplay_egl.c b/gst-libs/gst/gl/egl/gstgldisplay_egl.c
+index fb329ed..af06351 100644
+--- a/gst-libs/gst/gl/egl/gstgldisplay_egl.c
++++ b/gst-libs/gst/gl/egl/gstgldisplay_egl.c
+@@ -39,6 +39,9 @@ GST_DEBUG_CATEGORY_STATIC (gst_gl_display_debug);
+ #ifndef EGL_PLATFORM_WAYLAND
+ #define EGL_PLATFORM_WAYLAND 0x31D8
+ #endif
++#ifndef EGL_PLATFORM_GBM_MESA
++#define EGL_PLATFORM_GBM_MESA 0x31D7
++#endif
+ #ifndef EGL_PLATFORM_ANDROID
+ #define EGL_PLATFORM_ANDROID 0x3141
+ #endif
+diff --git a/m4/gst-gl.m4 b/m4/gst-gl.m4
+index c9c7602..b01c7c7 100644
+--- a/m4/gst-gl.m4
++++ b/m4/gst-gl.m4
+@@ -484,7 +484,7 @@ case $host in
+         AC_MSG_WARN([EGL is required by the Mesa GBM EGL backend])
+       else
+         HAVE_WINDOW_GBM=yes
+-        GL_CFLAGS="$GL_CFLAGS $DRM_CFLAGS"
++        GL_CFLAGS="$GL_CFLAGS $DRM_CFLAGS $GBM_CFLAGS"
+       fi
+     fi
+ 
+-- 
+2.7.4
+
