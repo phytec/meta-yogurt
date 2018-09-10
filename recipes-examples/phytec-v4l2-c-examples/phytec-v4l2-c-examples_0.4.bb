@@ -44,3 +44,5 @@ RDEPENDS_${PN} += " \
     bvtest \
     phytec-gstreamer-examples \
 "
+
+COMPATIBLE_MACHINE = "mx6[^ul]"

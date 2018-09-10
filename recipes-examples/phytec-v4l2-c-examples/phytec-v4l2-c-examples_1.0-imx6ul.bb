@@ -10,10 +10,10 @@ SECTION = "examples"
 
 # Archive created with
 #   $ unzip v4l2_c-examples.zip
-#   $ mv v4l2_c-examples_V1.0\ -\ Kopie/ phytec-v4l2-c-examples-imx6ul-1.0
-#   $ find phytec-v4l2-c-examples-imx6ul-1.0 -exec "touch" "{}" ";"
-#   $ find phytec-v4l2-c-examples-imx6ul-1.0 -name "*.sh" -exec "chmod" "+x" "{}" ";"
-#   $ tar --owner=root --group=root -czf phytec-v4l2-c-examples-imx6ul-1.0.tar.gz phytec-v4l2-c-examples-imx6ul-1.0/
+#   $ mv v4l2_c-examples_V1.0\ -\ Kopie/ phytec-v4l2-c-examples-1.0-imx6ul
+#   $ find phytec-v4l2-c-examples-1.0-imx6ul -exec "touch" "{}" ";"
+#   $ find phytec-v4l2-c-examples-1.0-imx6ul -name "*.sh" -exec "chmod" "+x" "{}" ";"
+#   $ tar --owner=root --group=root -czf phytec-v4l2-c-examples-1.0-imx6ul.tar.gz phytec-v4l2-c-examples-1.0-imx6ul/
 SRC_URI = "file://${PN}-${PV}.tar.gz"
 
 PR = "r0"
@@ -22,7 +22,7 @@ do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 do_install() {
-    INSTALL_DIR="${datadir}/phytec-v4l2-c-examples"
+    INSTALL_DIR="${datadir}/${PN}"
 
     install -d ${D}${INSTALL_DIR}
     for text in `find -name '*.txt'`; do
@@ -38,12 +38,11 @@ do_install() {
     ln -s ${INSTALL_DIR} ${D}/home/root/v4l2_c-examples
 }
 
-FILES_${PN} += " \
-    /home/root/ \
-    ${datadir}/phytec-v4l2-c-examples \
-"
+FILES_${PN} += " /home/root/"
 RDEPENDS_${PN} += " \
     media-ctl \
     bvtest \
-    phytec-gstreamer-examples-imx6ul \
+    phytec-gstreamer-examples \
 "
+
+COMPATIBLE_MACHINE = "mx6ul"

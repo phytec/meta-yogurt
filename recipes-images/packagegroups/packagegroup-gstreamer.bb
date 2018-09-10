@@ -41,6 +41,6 @@ PACKAGES_MAINLINE_append_mx6 = " \
 PACKAGES_VENDOR = ""
 PACKAGES_VENDOR_append_mx6ul = " \
     gstreamer1.0-plugins-imx \
-    phytec-gstreamer-examples-imx6ul \
-    phytec-v4l2-c-examples-imx6ul\
+    phytec-gstreamer-examples \
+    phytec-v4l2-c-examples\
 "

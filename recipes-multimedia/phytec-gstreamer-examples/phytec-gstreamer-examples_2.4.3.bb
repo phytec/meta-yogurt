@@ -69,3 +69,5 @@ RDEPENDS_${PN} += " \
 	gstreamer1.0-plugins-good-jpeg \
 	gstreamer1.0-plugin-bayer2rgb-neon \
 "
+
+COMPATIBLE_MACHINE = "mx6[^ul]"
