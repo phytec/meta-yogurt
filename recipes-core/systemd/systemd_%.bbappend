@@ -1,5 +1,9 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
+SRC_URI += "\
+   file://0001-roothomedir-apply-meson-build-setting-to-source-tree.patch \
+"
+
 #This setup adds about 1.3MB to the 4.4MB of the all disabled configuration
 PACKAGECONFIG ??= "\
     ${@bb.utils.filter('DISTRO_FEATURES', 'efi ldconfig pam selinux usrmerge', d)} \

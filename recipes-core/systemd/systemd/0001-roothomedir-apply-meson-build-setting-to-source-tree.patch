@@ -1,0 +1,120 @@
+From 0a74c0a673be2c974e0a56c99b4fe65338f974a8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stefan=20M=C3=BCller-Klieser?= <s.mueller-klieser@phytec.de>
+Date: Tue, 9 Apr 2019 12:02:12 +0200
+Subject: [PATCH] roothomedir: apply meson build setting to source tree
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Stefan Müller-Klieser <s.mueller-klieser@phytec.de>
+---
+ src/basic/user-util.c         | 4 ++--
+ src/core/execute.c            | 2 +-
+ src/core/namespace.c          | 6 +++---
+ src/nspawn/nspawn.c           | 4 ++--
+ src/nss-systemd/nss-systemd.c | 2 +-
+ 5 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/src/basic/user-util.c b/src/basic/user-util.c
+index 17a9b5a8f130..c9438feb110b 100644
+--- a/src/basic/user-util.c
++++ b/src/basic/user-util.c
+@@ -129,7 +129,7 @@ int get_user_creds(
+                         *gid = 0;
+ 
+                 if (home)
+-                        *home = "/root";
++                        *home = ROOTHOMEDIR;
+ 
+                 if (shell)
+                         *shell = "/bin/sh";
+@@ -424,7 +424,7 @@ int get_home_dir(char **_h) {
+         /* Hardcode home directory for root and nobody to avoid NSS */
+         u = getuid();
+         if (u == 0) {
+-                h = strdup("/root");
++                h = strdup(ROOTHOMEDIR);
+                 if (!h)
+                         return -ENOMEM;
+ 
+diff --git a/src/core/execute.c b/src/core/execute.c
+index 0df3971df673..483ebaf42676 100644
+--- a/src/core/execute.c
++++ b/src/core/execute.c
+@@ -2649,7 +2649,7 @@ static int acquire_home(const ExecContext *c, uid_t uid, const char** home, char
+ 
+         if (uid == 0) {
+                 /* Hardcode /root as home directory for UID 0 */
+-                *home = "/root";
++                *home = ROOTHOMEDIR;
+                 return 1;
+         }
+ 
+diff --git a/src/core/namespace.c b/src/core/namespace.c
+index 70089f212a57..ab8ea37c9dd0 100644
+--- a/src/core/namespace.c
++++ b/src/core/namespace.c
+@@ -122,14 +122,14 @@ static const MountEntry protect_kernel_modules_table[] = {
+ static const MountEntry protect_home_read_only_table[] = {
+         { "/home",               READONLY,     true  },
+         { "/run/user",           READONLY,     true  },
+-        { "/root",               READONLY,     true  },
++        { ROOTHOMEDIR,           READONLY,     true  },
+ };
+ 
+ /* ProtectHome=yes table */
+ static const MountEntry protect_home_yes_table[] = {
+         { "/home",               INACCESSIBLE, true  },
+         { "/run/user",           INACCESSIBLE, true  },
+-        { "/root",               INACCESSIBLE, true  },
++        { ROOTHOMEDIR,           INACCESSIBLE, true  },
+ };
+ 
+ /* ProtectSystem=yes table */
+@@ -162,7 +162,7 @@ static const MountEntry protect_system_strict_table[] = {
+         { "/dev",                READWRITE,    false },      /* PrivateDevices= */
+         { "/home",               READWRITE,    true  },      /* ProtectHome= */
+         { "/run/user",           READWRITE,    true  },      /* ProtectHome= */
+-        { "/root",               READWRITE,    true  },      /* ProtectHome= */
++        { ROOTHOMEDIR,           READWRITE,    true  },      /* ProtectHome= */
+ };
+ 
+ static const char *mount_entry_path(const MountEntry *p) {
+diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
+index 0f05ecff0326..65aaf1f9e664 100644
+--- a/src/nspawn/nspawn.c
++++ b/src/nspawn/nspawn.c
+@@ -2417,7 +2417,7 @@ static int inner_child(
+         if (envp[n_env])
+                 n_env++;
+ 
+-        if ((asprintf((char**)(envp + n_env++), "HOME=%s", home ? home: "/root") < 0) ||
++        if ((asprintf((char**)(envp + n_env++), "HOME=%s", home ? home: ROOTHOMEDIR) < 0) ||
+             (asprintf((char**)(envp + n_env++), "USER=%s", arg_user ? arg_user : "root") < 0) ||
+             (asprintf((char**)(envp + n_env++), "LOGNAME=%s", arg_user ? arg_user : "root") < 0))
+                 return log_oom();
+@@ -2499,7 +2499,7 @@ static int inner_child(
+         } else {
+                 if (!arg_chdir)
+                         /* If we cannot change the directory, we'll end up in /, that is expected. */
+-                        (void) chdir(home ?: "/root");
++                        (void) chdir(home ?: ROOTHOMEDIR);
+ 
+                 execle("/bin/bash", "-bash", NULL, env_use);
+                 execle("/bin/sh", "-sh", NULL, env_use);
+diff --git a/src/nss-systemd/nss-systemd.c b/src/nss-systemd/nss-systemd.c
+index f75405d2e557..e6c77509b15e 100644
+--- a/src/nss-systemd/nss-systemd.c
++++ b/src/nss-systemd/nss-systemd.c
+@@ -40,7 +40,7 @@ static const struct passwd root_passwd = {
+         .pw_uid = 0,
+         .pw_gid = 0,
+         .pw_gecos = (char*) "Super User",
+-        .pw_dir = (char*) "/root",
++        .pw_dir = (char*) ROOTHOMEDIR,
+         .pw_shell = (char*) "/bin/sh",
+ };
+ 
+-- 
+2.20.1
+
