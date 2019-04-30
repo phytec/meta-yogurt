@@ -1,0 +1,24 @@
+From 8d7a03e64d7e1a4613f305903e490c2b463a5695 Mon Sep 17 00:00:00 2001
+From: Andrew Svetlov <andrew.svetlov@gmail.com>
+Date: Thu, 7 Dec 2017 09:25:26 +0200
+Subject: [PATCH] Fix make clean
+
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 59868db7b165..ac0fce79c375 100644
+--- a/Makefile
++++ b/Makefile
+@@ -64,8 +64,8 @@ clean:
+ 	rm -f multidict/_istr.*.so
+ 	rm -f multidict/_istr.*.pyd
+ 	rm -rf .tox
+-	rm .install-deps
+-	rm .develop
++	rm -f .install-deps
++	rm -f .develop
+ 
+ doc:
+ 	make -C docs html
