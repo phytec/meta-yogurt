@@ -14,6 +14,7 @@ PACKAGECONFIG ??= "\
     networkd \
     resolved \
     sysusers \
+    logind \
 "
 
 PACKAGECONFIG[acl] = "-Dacl=true,-Dacl=false,acl"
