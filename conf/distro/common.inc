@@ -71,3 +71,6 @@ PREFERRED_VERSION_nodejs = "8.%"
 PREFERRED_VERSION_nodejs-native = "8.%"
 PREFERRED_VERSION_mraa = "2.0.%"
 PREFERRED_VERSION_upm = "1.7.%"
+
+#rust security flags
+require conf/distro/include/rust_security_flags.inc
