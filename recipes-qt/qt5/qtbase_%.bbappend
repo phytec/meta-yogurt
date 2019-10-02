@@ -11,6 +11,9 @@ PACKAGECONFIG_FONTS = "fontconfig"
 PACKAGECONFIG_append = " libinput xkbcommon-evdev"
 PACKAGECONFIG_DEFAULT = "dbus udev libs freetype"
 
+# accessibility is necessary for qtquickcontrols-qmlplugins
+PACKAGECONFIG_DEFAULT += "accessibility"
+
 #for qt widget applications add this in your layer
 #PACKAGECONFIG_append = " widgets"
 
