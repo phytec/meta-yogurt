@@ -1,0 +1,33 @@
+From 2ab66c96430ae21c92b22a3b314d9f7e2a6c0119 Mon Sep 17 00:00:00 2001
+From: Norbert Wesp <n.wesp@phytec.de>
+Date: Tue, 17 Dec 2019 17:33:04 +0100
+Subject: [PATCH] ext: opencv: gstgrabcut.cpp: do not include imgproc_c.h
+
+With this include we get failures like:
+    error: conflicting declaration of C function 'CvMoments cvMoments ...
+    error: conflicting declaration of C function 'void cvMoments ...
+The old c-header are already removed in v1.16, so this is kind of a backport.
+
+Signed-off-by: Norbert Wesp <n.wesp@phytec.de>
+---
+ ext/opencv/gstgrabcut.cpp | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/ext/opencv/gstgrabcut.cpp b/ext/opencv/gstgrabcut.cpp
+index 2e3aa60..db09c2f 100644
+--- a/ext/opencv/gstgrabcut.cpp
++++ b/ext/opencv/gstgrabcut.cpp
+@@ -85,10 +85,6 @@
+ #endif
+ 
+ #include "gstgrabcut.h"
+-extern "C"
+-{
+-#include <opencv2/imgproc/imgproc_c.h>
+-}
+ #include <opencv2/imgproc/imgproc.hpp>
+ GST_DEBUG_CATEGORY_STATIC (gst_grabcut_debug);
+ #define GST_CAT_DEFAULT gst_grabcut_debug
+-- 
+2.7.4
+
