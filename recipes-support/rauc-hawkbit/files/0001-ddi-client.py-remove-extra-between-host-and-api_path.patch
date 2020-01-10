@@ -1,0 +1,65 @@
+From 6a1e79b0b7c83da866e0602201db49d6e74d7dd2 Mon Sep 17 00:00:00 2001
+From: Enrico Joerns <ejo@pengutronix.de>
+Date: Fri, 15 Mar 2019 01:21:07 +0100
+Subject: [PATCH] ddi/client.py: remove extra / between host and api_path
+
+Leading / is already provided by by api_path itself. Having a double /
+will result in an error in more recent hawkBit versions:
+
+| WARNING Polling failed with a temporary error: 500: Server Error
+
+Fixes: #16
+
+Signed-off-by: Enrico Joerns <ejo@pengutronix.de>
+---
+ rauc_hawkbit/ddi/client.py | 2 +-
+ tests/test_client.py       | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/rauc_hawkbit/ddi/client.py b/rauc_hawkbit/ddi/client.py
+index 67cc152..d1c107f 100755
+--- a/rauc_hawkbit/ddi/client.py
++++ b/rauc_hawkbit/ddi/client.py
+@@ -137,7 +137,7 @@ class DDIClient(object):
+             Expanded API URL with protocol (http/https) and host prepended
+         """
+         protocol = 'https' if self.ssl else 'http'
+-        return '{protocol}://{host}/{api_path}'.format(
++        return '{protocol}://{host}{api_path}'.format(
+             protocol=protocol, host=self.host, api_path=api_path)
+ 
+     async def get_resource(self, api_path, query_params={}, **kwargs):
+diff --git a/tests/test_client.py b/tests/test_client.py
+index 520b745..ed49911 100644
+--- a/tests/test_client.py
++++ b/tests/test_client.py
+@@ -32,7 +32,7 @@ def create_app(loop):
+ async def test_get_resource_valid(test_client):
+     client = await test_client(create_app)
+ 
+-    ddi = DDIClient(client.session, '{}:{}'.format(client.host, client.port), False, None, 'DEFAULT', 'test-target')
++    ddi = DDIClient(client.session, '{}:{}'.format(client.host, client.port), False, None, '/DEFAULT', 'test-target')
+     resp = await ddi.get_resource('{tenant}/controller/v1/{controllerId}')
+ 
+     assert 'config' in resp
+@@ -41,7 +41,7 @@ async def test_get_resource_valid(test_client):
+ async def test_get_resource_invalid_key(test_client):
+     client = await test_client(create_app)
+ 
+-    ddi = DDIClient(client.session, '{}:{}'.format(client.host, client.port), False, None, 'DEFAULT', 'test-target')
++    ddi = DDIClient(client.session, '{}:{}'.format(client.host, client.port), False, None, '/DEFAULT', 'test-target')
+ 
+     with pytest.raises(KeyError):
+         resp = await ddi.get_resource('{tenant}/controller/v1/{dummy}')
+@@ -49,7 +49,7 @@ async def test_get_resource_invalid_key(test_client):
+ async def test_get_resource_invalid_path(test_client):
+     client = await test_client(create_app)
+ 
+-    ddi = DDIClient(client.session, '{}:{}'.format(client.host, client.port), False, None, 'DEFAULT', 'test-target')
++    ddi = DDIClient(client.session, '{}:{}'.format(client.host, client.port), False, None, '/DEFAULT', 'test-target')
+ 
+     with pytest.raises(APIError):
+         resp = await ddi.get_resource('{tenant}/controller/v2')
+-- 
+2.7.4
+
