@@ -2,7 +2,10 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 DEPENDS += "python3-setuptools-scm-native"
 
-SRC_URI +=  "file://config.cfg"
+SRC_URI += " \
+    file://0001-ddi-client.py-remove-extra-between-host-and-api_path.patch \
+    file://config.cfg \
+"
 
 do_patch_append() {
     bb.note("copying config.cfg from meta layer to source dir")
