@@ -5,7 +5,7 @@ DEPENDS = " \
     virtual/libiconv \
 "
 
-PACKAGECONFIG ??= "sensord"
+PACKAGECONFIG ??= ""
 PACKAGECONFIG[sensord] = "sensord,,rrdtool"
 
 INITSCRIPT_PACKAGES = "\
@@ -21,6 +21,7 @@ SYSTEMD_PACKAGES = "\
 SYSTEMD_SERVICE_${PN} = "lm_sensors.service"
 SYSTEMD_SERVICE_${PN}-fancontrol = "fancontrol.service"
 SYSTEMD_SERVICE_${PN}-sensord = "sensord.service"
+SYSTEMD_AUTO_ENABLE = "enable"
 
 FILES_${PN}-fancontrol = "${sbindir}/fancontrol ${sysconfdir}/init.d/fancontrol ${systemd_unitdir}/system/fancontrol.service"
 
@@ -72,6 +73,7 @@ RDEPENDS_${PN} += " \
     ${PN}-isatools \
 "
 
+RDEPENDS_${PN}-fancontrol = "lmsensors-config-fancontrol bash"
 RDEPENDS_${PN}-pwmconfig = "${PN}-fancontrol bash"
 PACKAGES_remove = "${PN}-sensord ${PN}-sensord-doc"
 PACKAGES =+ "${@bb.utils.contains('PACKAGECONFIG', 'sensord', '${PN}-sensord ${PN}-sensord-doc', '', d)}"
