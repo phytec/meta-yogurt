@@ -17,7 +17,7 @@ SRC_URI = " \
     git://git.phytec.de/aidemo-customvision \
     file://${PN}.service \
 "
-SRCREV = "3a933c00fc5d35ca344df3a90ab85ad8b1d2715a"
+SRCREV = "fba9a39303b5c43c7be1eb3876c7e6c34bc3e87e"
 S = "${WORKDIR}/git/modules/demo/src"
 
 inherit qmake5 systemd
