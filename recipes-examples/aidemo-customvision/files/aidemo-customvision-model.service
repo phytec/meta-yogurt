@@ -1,0 +1,14 @@
+[Unit]
+Description=AI demo Custom Vision model runner
+Requires=docker.service
+After=docker.service
+Conflicts=iotedge.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/docker run --rm --name model -p 8877:8877 -d phytecorg/aidemo-customvision-model --port 8877 hands
+ExecStop=/usr/bin/docker stop model
+
+[Install]
+WantedBy=multi-user.target
