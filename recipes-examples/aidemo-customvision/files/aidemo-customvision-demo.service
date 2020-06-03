@@ -1,0 +1,12 @@
+[Unit]
+Description=AI demo Custom Vision Qt5 application
+Requires=weston.service
+After=weston.service
+
+[Service]
+Restart=on-failure
+Environment="GST_CAMERABIN_NO_CROP=1"
+ExecStart=/usr/bin/qtLauncher /usr/bin/aidemo-customvision-demo --endpoint http://localhost:8877/image
+
+[Install]
+WantedBy=multi-user.target

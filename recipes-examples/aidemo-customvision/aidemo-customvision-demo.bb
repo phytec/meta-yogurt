@@ -13,11 +13,21 @@ DEPENDS = " \
     qtdeclarative \
 "
 
-SRC_URI = "git://git.phytec.de/aidemo-customvision"
+SRC_URI = " \
+    git://git.phytec.de/aidemo-customvision \
+    file://${PN}.service \
+"
 SRCREV = "3a933c00fc5d35ca344df3a90ab85ad8b1d2715a"
 S = "${WORKDIR}/git/modules/demo/src"
 
-inherit qmake5
+inherit qmake5 systemd
+
+SYSTEMD_SERVICE_${PN} = "${PN}.service"
+
+do_install_append () {
+    install -d ${D}${systemd_system_unitdir}
+    install -m 0644 ${WORKDIR}/${PN}.service ${D}${systemd_system_unitdir}
+}
 
 RDEPENDS_${PN} += " \
     qtbase \
@@ -25,4 +35,7 @@ RDEPENDS_${PN} += " \
     qtquickcontrols2-qmlplugins \
     gstreamer1.0-plugins-bad \
 "
-FILES_${PN} = "${bindir}"
+FILES_${PN} = " \
+    ${bindir} \
+    ${systemd_system_unitdir} \
+"
