@@ -7,16 +7,16 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
 SRC_URI = " \
-    ftp://ftp.phytec.de/pub/Software/Linux/BSP-Yocto-IoTEdge/aikit-docker-images/${PN}-${PV}.tar.gz;unpack=false \
-    file://aikit-docker-images.service \
-    file://aikit-docker-images.py \
+    ftp://ftp.phytec.de/pub/Software/Linux/BSP-Yocto-IoTEdge/aikit-docker-images/${PN}-${PV}-${TARGET_ARCH}.tar.gz;unpack=false \
 "
-SRC_URI[md5sum] = "95a772bd63777dc752cd8865bc748a17"
-SRC_URI[sha256sum] = "70afa7e2289b613501337cceb58358ce05eeb3fe36f23891dd0f0284dc7e2ad4"
 
-inherit systemd
-
-SYSTEMD_SERVICE_${PN} = "aikit-docker-images.service"
+# Default TARGET_ARCH is assumed to be "arm"
+SRC_URI[md5sum] = "${@bb.utils.contains('TARGET_ARCH', 'aarch64', \
+    'ea9de55789ca440ce7c06135d0cdf58f', \
+    'c7b59f188a7a41a4eb350d7180ccf1ee', d)}"
+SRC_URI[sha256sum] = "${@bb.utils.contains('TARGET_ARCH', 'aarch64', \
+    '384f717ad39e5fe19e64adfcba943c8d4336b806ed1ad8277c60d6a261042b54', \
+    '4fc37c50238a544faa45681f983e830a29393510a32944a86af4c0e4a7d47785', d)}"
 
 EXCLUDE_FROM_SHLIBS = "1"
 INHIBIT_DEFAULT_DEPS = "1"
@@ -32,17 +32,13 @@ PREFIX = "${localstatedir}/lib"
 
 fakeroot do_install () {
     mkdir -p ${D}${PREFIX}
-    tar --no-same-owner -xpf ${WORKDIR}/${PN}-${PV}.tar.gz -C ${D}${PREFIX}
-    install -Dm 0644 ${WORKDIR}/aikit-docker-images.service ${D}${systemd_system_unitdir}/aikit-docker-images.service
-    install -Dm 0755 ${WORKDIR}/aikit-docker-images.py ${D}${bindir}/aikit-docker-images
+    tar --no-same-owner -xpf ${WORKDIR}/${PN}-${PV}-${TARGET_ARCH}.tar.gz -C ${D}${PREFIX}
 }
 
 FILES_${PN} = " \
     ${localstatedir}/lib/docker \
-    ${systemd_system_unitdir}/* \
-    ${bindir}/aikit-docker-images \
 "
-RDEPENDS_${PN} = "iotedge-cli iotedge-daemon docker python3"
+RDEPENDS_${PN} = "iotedge-cli iotedge-daemon docker"
 INSANE_SKIP_${PN} = " \
     already-stripped \
     staticdev \
