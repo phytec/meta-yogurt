@@ -15,4 +15,5 @@ IMAGE_INSTALL = " \
     docker \
     iotedge-cli \
     iotedge-daemon \
+    aikit-docker-images \
 "
