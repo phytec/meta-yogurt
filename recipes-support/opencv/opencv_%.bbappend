@@ -4,3 +4,5 @@ do_install_append() {
         cp -f ${B}/bin/example_* ${D}${datadir}/OpenCV/samples/bin/
     fi
 }
+
+FILES_${PN}-samples += " ${datadir}/OpenCV/samples/"
