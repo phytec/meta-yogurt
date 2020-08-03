@@ -15,4 +15,5 @@ RDEPENDS_${PN} = " \
     wl12xx-calibrator \
     laird-sterling-etsi \
     brcm-patchram-plus \
+    ${@bb.utils.contains("STERLING_LWB_BACKPORT", "1", "backports-laird", "", d)} \
 "
