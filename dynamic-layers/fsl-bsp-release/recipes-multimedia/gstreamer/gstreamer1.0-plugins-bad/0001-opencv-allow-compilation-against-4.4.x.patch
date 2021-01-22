@@ -1,0 +1,26 @@
+From a4ec1f84b2907aed34807457c92441ef509cae40 Mon Sep 17 00:00:00 2001
+From: Stefan Riedmueller <s.riedmueller@phytec.de>
+Date: Thu, 21 Jan 2021 16:27:27 +0100
+Subject: [PATCH] opencv-allow-compilation-against-4.4.x
+
+Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index ed3f9463e7d9..23af42161020 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1845,7 +1845,7 @@ AG_GST_CHECK_FEATURE(OPENCV, [opencv plugins], opencv, [
+       HAVE_OPENCV="yes"
+     fi
+   ], [
+-    PKG_CHECK_MODULES([OPENCV], [opencv4 >= 4.0.0 opencv4 < 4.2.0] , [
++    PKG_CHECK_MODULES([OPENCV], [opencv4 >= 4.0.0 opencv4 < 4.5.0] , [
+     AC_PROG_CXX
+     AC_LANG([C++])
+     OLD_CPPFLAGS=$CPPFLAGS
+-- 
+2.25.1
+
