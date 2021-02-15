@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
 SRC_URI_append = "\
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland x11', 'file://weston.conf', '', d)} \
