@@ -24,6 +24,6 @@ USERADD_PARAM_${PN} = "--system --home-dir / --no-create-home --shell /bin/false
 DEPENDS = "curl glib-2.0-native json-glib"
 
 do_install_append () {
-	install -d ${D}${sysconfdir}/${PN}
-	install -m 644 ${S}/config.conf.example ${D}${sysconfdir}/${PN}/config.conf
+	install -d ${D}${sysconfdir}/${BPN}
+	install -m 644 ${S}/config.conf.example ${D}${sysconfdir}/${BPN}/config.conf
 }
