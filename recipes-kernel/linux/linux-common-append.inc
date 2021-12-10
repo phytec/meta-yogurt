@@ -3,6 +3,7 @@ include recipes-kernel/linux/mtd_test_packages.inc
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/features:"
 SRC_URI_append = " file://mtd-tests.cfg"
+SRC_URI_append_mx7 = " file://rauc.cfg"
 KERNEL_MODULES_RDEPENDS_BLACKLIST += "${MTD_TEST_PACKAGES}"
 
 SRC_URI_append_secureboot = " \
