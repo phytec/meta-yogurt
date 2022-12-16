@@ -13,5 +13,6 @@ RDEPENDS_${PN} = " \
     hostapd \
     linux-firmware-wl12xx \
     wl12xx-calibrator \
+    linux-firmware-wl18xx \
     linux-firmware-bcm43430 \
 "
