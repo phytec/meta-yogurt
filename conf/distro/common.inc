@@ -3,6 +3,8 @@ DISTRO_VERSION_mx6 = "BSP-Yocto-i.MX6-dunfell"
 DISTRO_VERSION_mx6ul = "BSP-Yocto-i.MX6UL-PD21.1.0"
 DISTRO_VERSION_ti33x = "BSP-Yocto-AM335x-dunfell"
 DISTRO_VERSION_rk3288 = "BSP-Yocto-RK3288-dunfell"
+DISTRO_VERSION_am62xx = "BSP-Yocto-AM62x-dunfell"
+DISTRO_VERSION_am64xx = "BSP-Yocto-AM64x-dunfell"
 VENDOR = "phytec"
 TARGET_VENDOR = "-${VENDOR}"
 
