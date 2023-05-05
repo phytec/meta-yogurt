@@ -15,6 +15,7 @@ IMAGE_INSTALL = " \
     packagegroup-benchmark \
     packagegroup-update \
     packagegroup-userland \
+    packagegroup-userland-flashing \
     packagegroup-rt \
     packagegroup-coprocessor \
     ${@bb.utils.contains("COMBINED_FEATURES", "alsa", "packagegroup-audio", "", d)} \
