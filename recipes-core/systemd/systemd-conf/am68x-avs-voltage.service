@@ -1,0 +1,12 @@
+[Unit]
+Description=Set AVS voltage
+DefaultDependencies=no
+Wants=sysinit.target
+After=getty.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/i2cset -y 0 0x40 0x00 0x41
+
+[Install]
+WantedBy=sysinit.target

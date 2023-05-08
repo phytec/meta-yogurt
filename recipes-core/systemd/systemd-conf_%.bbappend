@@ -13,6 +13,7 @@ SRC_URI += " \
 "
 
 SRC_URI_append_mx6ul = " file://cpuidle-disable-state.rules"
+SRC_URI_append_phyboard-izar-am68x-1 = " file://am68x-avs-voltage.service"
 
 SYSTEMD_SERVICE_${PN} = " \
     ${@bb.utils.contains("MACHINE_FEATURES", "can", "can0.service", "", d)} \
@@ -37,6 +38,12 @@ do_install_append() {
         install -m 0644 ${WORKDIR}/cpuidle-disable-state.rules ${D}${sysconfdir}/udev/rules.d/
     fi
 
+    if [ -e ${WORKDIR}/am68x-avs-voltage.service ]; then
+        install -d ${D}${sysconfdir}/systemd/system/sysinit.target.wants
+        install -m 0644 ${WORKDIR}/am68x-avs-voltage.service ${D}${sysconfdir}/systemd/system/
+        ln -sf ../am68x-avs-voltage.service ${D}${sysconfdir}/systemd/system/sysinit.target.wants/am68x-avs-voltage.service
+    fi
+
     rm -rf ${D}${systemd_unitdir}/network/wired.network
     rm -rf ${D}${systemd_unitdir}/network/80-wired.network
 }
@@ -44,4 +51,5 @@ do_install_append() {
 FILES_${PN} += "\
     ${systemd_system_unitdir} \
     ${sysconfdir}/udev/rules.d \
+    ${sysconfdir}/systemd/system \
 "
