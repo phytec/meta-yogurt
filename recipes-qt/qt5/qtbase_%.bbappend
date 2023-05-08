@@ -14,6 +14,7 @@ PACKAGECONFIG_DEFAULT = "dbus udev libs freetype \
 PACKAGECONFIG_DEFAULT += "accessibility"
 
 PACKAGECONFIG_append_am62xx = " widgets"
+PACKAGECONFIG_append_j7 = " widgets"
 
 SRC_URI += "file://res-touchscreen.rules"
 
