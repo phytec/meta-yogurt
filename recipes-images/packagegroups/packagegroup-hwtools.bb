@@ -54,3 +54,7 @@ RDEPENDS_${PN}_append_mx6 = " mmdc bbu"
 RDEPENDS_${PN}_append_mx6ul = " mmdc bbu"
 RDEPENDS_${PN}_append_rk3288 = " rkeeprom"
 RDEPENDS_${PN}_append_ti33x = " phyedit bbu"
+
+RDEPENDS_${PN}_remove_am62xx = "lmsensors-fancontrol"
+RDEPENDS_${PN}_remove_am62axx = "lmsensors-fancontrol"
+RDEPENDS_${PN}_remove_am64xx = "lmsensors-fancontrol"
