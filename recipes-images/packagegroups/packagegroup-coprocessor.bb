@@ -5,6 +5,16 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit packagegroup
 
+# Include AM57 examples from meta-ti
+RDEPENDS_${PN}_append_am57xx = " \
+    ti-ipc-rtos-fw \
+    ti-ipc-examples-linux \
+    ti-ipc-test \
+    pru-icss \
+    uio-test-pruss \
+    uio-module-drv-test \
+"
+
 # Include AM62/AM64 examples from meta-ti
 RDEPENDS_${PN}_append_k3 = " \
     ti-rtos-firmware \
