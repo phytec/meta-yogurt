@@ -69,3 +69,10 @@ RDEPENDS_${PN}_append_mx8mp = " \
     imx-gst1.0-plugin \
     gstreamer1.0-plugins-bad \
 "
+
+RDEPENDS_${PN}_append_am57xx = " \
+    gstreamer1.0-plugin-bayer2rgb-neon \
+    gstreamer1.0-plugins-hevc \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'mmip', "gstreamer1.0-plugins-ducati", '', d)} \
+    ${@bb.utils.contains('MACHINE_FEATURES', 'mmip', "gstreamer1.0-plugins-vpe", '', d)} \
+"
