@@ -1,7 +1,8 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS_prepend := "${THISDIR}:"
 
 SRC_URI_append = " \
     file://0001-psplash-Change-colors-to-PHYTEC-palette.patch \
+    file://psplash-poky.png \
     file://psplash-bar.png \
 "
 
